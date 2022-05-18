@@ -9,7 +9,6 @@ public class DbUtil {
             Class.forName("org.postgresql.Driver");
             return DriverManager.getConnection("jdbc:postgresql://localhost:5432/axizdb", "axizuser", "axiz");
         } catch (Exception e) {
-            // 本来は専用の例外クラスを作成したほうがよい
             throw new RuntimeException(e);
         }
     }
