@@ -1,4 +1,4 @@
-package entity;
+package jp.co.axiz.entity;
 
 public class Product{
 	private Integer productId;
@@ -32,7 +32,7 @@ public class Product{
 		this.productName = productName;
 	}
 	
-	public Integer getprice() {
+	public Integer getPrice() {
 		return this.price;
 	}
 	

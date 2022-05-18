@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entity.Product;
-import service.ProductService;
-import util.Utility;
+import jp.co.axiz.entity.Product;
+import jp.co.axiz.service.ProductService;
+import jp.co.axiz.util.ParamUtil;
 
 /**
  * Servlet implementation class topServlet
@@ -40,24 +41,22 @@ public class TopServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
-		String id = request.getParameter("id");
-		String str = "";
-		String path = "top.jsp";
+		String name = request.getParameter("name");
+		String price = request.getParameter("price");
+		String path = "searchResult.jsp";
 		
-		if(!Utility.isNullOrEmpty(id)) {
-			ProductService productService = new ProductService();
-			Product product = productService.authentication(Integer.parseInt(id));
-			if(product != null) {
-				path = "searchResult.jsp";
-				str = "データを取得しました";
-				request.setAttribute("product", product);
-			}else {
-				str = "対象のデータはありません";
-			}
+		ProductService productService = new ProductService();
+		Product searchProduct = new Product(name,ParamUtil.checkAndParseInt(price));
+		List<Product> list = productService.authentication(searchProduct);
+		
+		if(list.isEmpty()) {
+			path = "top.jsp";
+			request.setAttribute("str", "対象のデータはありません");
 		}else {
-			str = "product_idがありません";
+			request.setAttribute("list", list);
 		}
-		request.setAttribute("str", str);
+		
+		
 		request.getRequestDispatcher(path).forward(request, response);
 	}
 
